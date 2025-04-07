@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:async';
 
 /// Replace with your actual Gemini API key.
-const String geminiApiKey = 'gemini_api_key';
+const String geminiApiKey = 'AIzaSyA0P4TH0B9_SHHP81ap6aJivGR5-8lzt7s';
 
 /// Get user input with a default value shown
 String? promptUserWithDefault(String message, String defaultValue) {

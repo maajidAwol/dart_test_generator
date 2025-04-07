@@ -1,15 +1,32 @@
-# 🧪 Dart Test Generator
+# 🧪 package:coverage + LLM = test generation
+## GSoC 2025 Proposal Project
 
-A command-line tool that automatically generates comprehensive unit tests for Dart classes using the Gemini AI API. This tool analyzes your Dart code and creates well-structured, meaningful tests following best practices.
+A command-line tool that automatically generates comprehensive unit tests for Dart classes using the Gemini AI API. This project serves as an initial phase demonstration for a Google Summer of Code 2025 (GSoC) proposal, exploring the potential of combining package:coverage insights with Large Language Models (LLMs) for intelligent test generation in Dart.
 
-## 📋 Features
+🔗 [View on GitHub](https://github.com/maajidAwol/dart_test_generator.git)
 
-- 🤖 AI-powered test generation
+## 🎯 Current Implementation
+
+This CLI tool currently:
+- Generates comprehensive unit tests using Gemini AI
+- Handles import management automatically
+- Processes test dependencies
+- Provides a default example implementation
+- Generates well-structured, readable test code
+
+## 📋 Implemented Features
+
+- 🤖 Test generation via Gemini API
 - 📝 Follows Dart testing best practices
-- 🎯 Generates tests for all public methods
-- ✨ Handles edge cases and error conditions
-- 🔄 Automatic import management
-- 📦 Automatic dependency setup
+- 🎯 Generates tests for:
+  - Public methods
+  - Edge cases
+  - Error conditions
+  - Boundary values
+- 📦 Automatic dependency management:
+  - Import resolution
+  - Package name detection
+  - Test dependency setup
 
 ## 🚀 Getting Started
 
@@ -22,7 +39,7 @@ A command-line tool that automatically generates comprehensive unit tests for Da
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/dart_test_generator.git
+git clone https://github.com/maajidAwol/dart_test_generator.git
 cd dart_test_generator
 ```
 
@@ -42,12 +59,12 @@ const String geminiApiKey = 'your-api-key-here';
 
 1. Run the generator:
 ```bash
-dart run bin/gemini_test_generator.dart
+dart run
 ```
 
 2. Enter the path to your source file when prompted. The tool comes with a default example:
 
-[Screenshot of the file path prompt and input]
+![File path prompt](dart_run.png)
 
 3. The tool will automatically:
    - Generate comprehensive tests
@@ -55,11 +72,10 @@ dart run bin/gemini_test_generator.dart
    - Add necessary dependencies
    - Run `dart pub get`
 
-[Screenshot of the generation process]
 
 4. Run the generated tests:
 ```bash
-dart test test/generated_json_processor_example_test.dart
+dart test 
 ```
 
 Output:
@@ -69,20 +85,67 @@ Built test:test.
 00:00 +19: All tests passed!
 ```
 
-## 📝 Example
+## 📝 Examples
+
+### Default Example Implementation
+The repository includes several sample test files in the `test` directory that were generated using the Gemini AI API. These serve as real-world examples of the tool's capabilities:
+
+- `test/generated_json_processor_example_test.dart`: Basic JSON processing tests
+- `test/generated_json_processor_sample3_test.dart`: Comprehensive test suite with edge cases
+
+These sample tests demonstrate:
+- Proper test structure and organization
+- Comprehensive edge case handling
+- Error condition testing
+- Real-world application of testing best practices
 
 ### Input: Default Example File
 ```dart
 // lib/json_processor_example.dart
+import 'dart:convert';
+
 class JsonProcessor {
+  /// Sums the 'value' fields from a JSON string representing a list of objects.
+  /// Throws a FormatException if the JSON structure is invalid.
   double sumValues(String jsonString) {
-    // Implementation
+    final List<dynamic> list = jsonDecode(jsonString);
+    double sum = 0.0;
+    for (var item in list) {
+      if (item is Map && item.containsKey('value')) {
+        final dynamic value = item['value'];
+        if (value is num) {
+          sum += value.toDouble();
+        } else {
+          throw FormatException('Invalid value type');
+        }
+      } else {
+        throw FormatException('Invalid item format');
+      }
+    }
+    return sum;
   }
-  
+
+  /// Multiplies each 'value' in the JSON string by a given factor and returns the results.
+  /// Throws a FormatException for invalid JSON structure or value types.
   List<double> multiplyValues(String jsonString, double factor) {
-    // Implementation
+    final List<dynamic> list = jsonDecode(jsonString);
+    final List<double> result = [];
+    for (var item in list) {
+      if (item is Map && item.containsKey('value')) {
+        final dynamic value = item['value'];
+        if (value is num) {
+          result.add(value.toDouble() * factor);
+        } else {
+          throw FormatException('Invalid value type');
+        }
+      } else {
+        throw FormatException('Invalid item format');
+      }
+    }
+    return result;
   }
 }
+
 ```
 
 ### Output: Generated Test File
@@ -174,31 +237,58 @@ The tool automatically:
 - Manages imports correctly
 - Handles package names dynamically
 
-## 🐛 Known Issues
 
-- Currently supports single class per file
-- Requires proper JSON structure for default example
-- API key must be set manually
 
-## 🔜 Future Improvements
 
-- [ ] Support for multiple classes per file
-- [ ] Custom test template configuration
-- [ ] Integration test generation
-- [ ] Test coverage reporting
-- [ ] Custom naming conventions
-- [ ] Environment variable for API key
 
-## 📞 Support
+## 🔬 Research Goals
 
-If you have any questions or run into issues, please [open an issue](https://github.com/yourusername/dart_test_generator/issues).
+This project explores:
+- LLM effectiveness in test generation
+- Coverage-guided test improvement
+- Test quality and coverage metrics
+- Developer productivity impact
+- Best practices for AI-assisted testing
+- Integration with existing tools
+
+## 📈 Evaluation Metrics
+
+The project's success will be measured by:
+- Test coverage percentage
+- Error detection rate
+- False positive/negative rates
+- Developer time savings
+- Code maintainability impact
 
 ## 🙏 Acknowledgments
 
+- Proposed as part of Google Summer of Code 2025 for Dart
 - Powered by Google's Gemini AI
 - Built with Dart
-- Inspired by best practices in testing
+- Inspired by testing best practices
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+*Note: This is a proof-of-concept implementation for a GSoC 2025 proposal. Features and capabilities may evolve based on project requirements and feedback.*
+
+## 📚 Sample Tests
+
+The repository includes several AI-generated test files that showcase the tool's capabilities:
+
+1. **JSON Processor Tests**
+   - Location: `test/generated_json_processor_example1_test.dart`
+   - Features:
+     - Basic value summation tests
+     - JSON parsing validation
+     - Error handling cases
+
+2. **Extended Test Suite**
+   - Location: `test/generated_json_processor_sample3_test.dart`
+   - Features:
+     - Comprehensive edge cases
+     - Type validation
+     - Boundary testing
+     - Error condition handling
+
+These sample tests serve as both examples and validation of the tool's effectiveness in generating meaningful, comprehensive test suites.
